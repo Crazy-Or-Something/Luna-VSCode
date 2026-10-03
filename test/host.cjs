@@ -1,0 +1,28 @@
+const assert = require('node:assert/strict');
+const path = require('node:path');
+const fs = require('node:fs');
+const vscode = require('vscode');
+exports.run = async function run() {
+    const folder = vscode.workspace.workspaceFolders[0].uri;
+    const config = vscode.workspace.getConfiguration('luna', folder);
+    await config.update('profileFile', 'profiles/example.jsonc', vscode.ConfigurationTarget.WorkspaceFolder);
+    await config.update('profileId', 'example', vscode.ConfigurationTarget.WorkspaceFolder);
+    const extension = vscode.extensions.getExtension('crazy-or-something.luna-language');
+    assert.ok(extension, 'Extension should be discovered');
+    await extension.activate();
+    const document = await vscode.workspace.openTextDocument(vscode.Uri.file(path.join(folder.fsPath, 'sample.ln')));
+    assert.equal(document.languageId, 'luna', '.ln language association');
+    await vscode.window.showTextDocument(document);
+    const items = await vscode.commands.executeCommand('vscode.executeCompletionItemProvider', document.uri, new vscode.Position(0, 2));
+    const labels = items.items.map(x => typeof x.label === 'string' ? x.label : x.label.label);
+    for (const label of ['echo', 'state', 'hello']) assert.ok(labels.includes(label), 'Missing completion: ' + label);
+    const hover = await vscode.commands.executeCommand('vscode.executeHoverProvider', document.uri, new vscode.Position(1, 1));
+    assert.ok(hover.length, 'Custom keyword hover');
+    const inString = await vscode.commands.executeCommand('vscode.executeCompletionItemProvider', document.uri, new vscode.Position(2, 9));
+    assert.equal(inString.items.some(x => x.label === 'echo' && x.detail === 'echo → print'), false);
+    await config.update('profileFile', 'profiles/default.jsonc', vscode.ConfigurationTarget.WorkspaceFolder);
+    await config.update('profileId', 'profile1', vscode.ConfigurationTarget.WorkspaceFolder);
+    const blank = await vscode.commands.executeCommand('vscode.executeCompletionItemProvider', document.uri, new vscode.Position(0, 2));
+    assert.equal(blank.items.some(x => x.label === 'echo'), false, 'Profile switch updates completions');
+    fs.writeFileSync(path.join(folder.fsPath, 'test-result.json'), JSON.stringify({ passed: true, checks: ['activation', '.ln language', 'custom completion', 'hover', 'string context', 'profile switch'] }, null, 2));
+};

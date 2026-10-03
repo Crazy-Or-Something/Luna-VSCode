@@ -1,0 +1,62 @@
+{
+  "name": "Luna",
+  "scopeName": "source.luna",
+  "patterns": [
+    {
+      "name": "comment.block.luna",
+      "begin": "--\\[(=*)\\[",
+      "end": "\\]\\1\\]"
+    },
+    {
+      "name": "comment.line.double-dash.luna",
+      "match": "--.*$"
+    },
+    {
+      "name": "string.quoted.double.luna",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.luna",
+          "match": "\\\\."
+        }
+      ]
+    },
+    {
+      "name": "string.quoted.single.luna",
+      "begin": "'",
+      "end": "'",
+      "patterns": [
+        {
+          "name": "constant.character.escape.luna",
+          "match": "\\\\."
+        }
+      ]
+    },
+    {
+      "name": "string.quoted.other.multiline.luna",
+      "begin": "\\[(=*)\\[",
+      "end": "\\]\\1\\]"
+    },
+    {
+      "name": "keyword.control.luna",
+      "match": "\\b(?:and|break|do|else|elseif|end|for|function|global|goto|if|in|local|not|or|repeat|return|then|until|while)\\b"
+    },
+    {
+      "name": "constant.language.luna",
+      "match": "\\b(?:true|false|nil)\\b"
+    },
+    {
+      "name": "constant.numeric.luna",
+      "match": "\\b(?:0[xX][0-9A-Fa-f]+(?:\\.[0-9A-Fa-f]*)?(?:[pP][+-]?[0-9]+)?|[0-9]+(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?)\\b"
+    },
+    {
+      "name": "entity.name.function.luna",
+      "match": "\\b[A-Za-z_][A-Za-z0-9_]*(?=\\s*\\()"
+    },
+    {
+      "name": "keyword.operator.luna",
+      "match": "\\.\\.?\\.?|[+*/%^#=<>~&|:-]"
+    }
+  ]
+}

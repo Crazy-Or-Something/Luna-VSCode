@@ -1,0 +1,117 @@
+{
+  "name": "luna-language",
+  "displayName": "Luna",
+  "description": "Luna syntax highlighting and profile-aware completions.",
+  "version": "0.1.0",
+  "publisher": "crazy-or-something",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Crazy-Or-Something/luna.git"
+  },
+  "main": "./extension.cjs",
+  "extensionKind": [
+    "workspace"
+  ],
+  "activationEvents": [
+    "onLanguage:luna",
+    "onCommand:luna.selectProfile"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": {
+      "supported": false
+    }
+  },
+  "scripts": {
+    "sync": "node sync-runtime.cjs",
+    "test": "node --test test/core.test.mjs",
+    "vscode:prepublish": "node sync-runtime.cjs"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "luna",
+        "aliases": [
+          "Luna",
+          "ln"
+        ],
+        "extensions": [
+          ".ln"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./assets/icon/ln_icon.png",
+          "dark": "./assets/icon/ln_icon.png"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "luna",
+        "scopeName": "source.luna",
+        "path": "./syntaxes/luna.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "luna.selectProfile",
+        "title": "Luna: Select Profile"
+      },
+      {
+        "command": "luna.openProfile",
+        "title": "Luna: Open Profiles File"
+      }
+    ],
+    "configuration": {
+      "title": "Luna",
+      "properties": {
+        "luna.profileFile": {
+          "type": "string",
+          "scope": "resource",
+          "default": "profiles/default.jsonc",
+          "description": "Profiles JSON/JSONC file, relative to the workspace folder or absolute."
+        },
+        "luna.profileId": {
+          "type": "string",
+          "scope": "resource",
+          "default": "",
+          "description": "Profile ID. Empty selects automatically when the collection contains one profile."
+        }
+      }
+    },
+    "configurationDefaults": {
+      "[luna]": {
+        "editor.semanticHighlighting.enabled": true,
+        "editor.quickSuggestions": {
+          "other": "on",
+          "comments": "off",
+          "strings": "off"
+        }
+      }
+    },
+    "semanticTokenScopes": [
+      {
+        "language": "luna",
+        "scopes": {
+          "keyword": [
+            "keyword.control.luna"
+          ],
+          "function": [
+            "support.function.luna"
+          ],
+          "macro": [
+            "entity.name.function.luna"
+          ]
+        }
+      }
+    ]
+  }
+}
