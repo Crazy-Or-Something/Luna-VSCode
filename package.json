@@ -1,8 +1,8 @@
 {
   "name": "luna-language",
   "displayName": "Luna",
-  "description": "Luna syntax highlighting and profile-aware completions.",
-  "version": "0.1.0",
+  "description": "Luna highlighting, profile-aware completions, diagnostics and syntax checks.",
+  "version": "0.2.0",
   "publisher": "crazy-or-something",
   "engines": {
     "vscode": "^1.90.0"
@@ -12,7 +12,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Crazy-Or-Something/luna.git"
+    "url": "https://github.com/Crazy-Or-Something/Luna-VSCode.git"
   },
   "main": "./extension.cjs",
   "extensionKind": [
@@ -20,7 +20,8 @@
   ],
   "activationEvents": [
     "onLanguage:luna",
-    "onCommand:luna.selectProfile"
+    "onCommand:luna.selectProfile",
+    "onCommand:luna.checkFile"
   ],
   "capabilities": {
     "untrustedWorkspaces": {
@@ -32,7 +33,7 @@
   },
   "scripts": {
     "sync": "node sync-runtime.cjs",
-    "test": "node --test test/core.test.mjs",
+    "test": "node --test test/core.test.mjs test/diagnostics.test.mjs",
     "vscode:prepublish": "node sync-runtime.cjs"
   },
   "contributes": {
@@ -68,6 +69,10 @@
       {
         "command": "luna.openProfile",
         "title": "Luna: Open Profiles File"
+      },
+      {
+        "command": "luna.checkFile",
+        "title": "Luna: Check current file"
       }
     ],
     "configuration": {
@@ -84,6 +89,12 @@
           "scope": "resource",
           "default": "",
           "description": "Profile ID. Empty selects automatically when the collection contains one profile."
+        },
+        "luna.runtimePath": {
+          "type": "string",
+          "scope": "resource",
+          "default": "",
+          "description": "Lua executable for syntax checks. Absolute or relative to the workspace folder. Empty searches build/ and the sibling Luna repository."
         }
       }
     },

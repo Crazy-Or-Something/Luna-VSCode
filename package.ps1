@@ -14,7 +14,7 @@ if (-not $lunaManifest.engines.vscode) { throw 'Missing engines.vscode in packag
 if ($LASTEXITCODE -ne 0) { throw 'Runtime sync failed' }
 
 $lunaFiles = @('package.json','extension.cjs','language-configuration.json','README.md',
-    'lib\luna.mjs','lib\profile.mjs','lib\language.mjs','syntaxes\luna.tmLanguage.json','assets\icon\ln_icon.png')
+    'lib\diagnostics.mjs','lib\luna.mjs','lib\profile.mjs','lib\language.mjs','syntaxes\luna.tmLanguage.json','assets\icon\ln_icon.png')
 foreach ($name in $lunaFiles) {
     if (-not (Test-Path -LiteralPath (Join-Path $lunaExtension $name) -PathType Leaf)) { throw "Missing package file: $name" }
 }

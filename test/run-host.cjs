@@ -1,14 +1,14 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
-const root = path.resolve(__dirname, '../../..');
+const root = path.resolve(__dirname, '..');
 const workspace = path.join(root, 'build/vscode-workspace');
 const extension = path.resolve(__dirname, '..');
 const code = process.argv[2];
 if (!code || !fs.existsSync(code)) throw new Error('Pass the full path to Code.exe');
 fs.mkdirSync(path.join(workspace, 'profiles'), { recursive: true });
 for (const file of ['default.jsonc', 'example.jsonc']) {
-    fs.copyFileSync(path.join(root, 'profiles', file), path.join(workspace, 'profiles', file));
+    fs.copyFileSync(path.join(root, '../Luna/profiles', file), path.join(workspace, 'profiles', file));
 }
 fs.writeFileSync(path.join(workspace, 'sample.ln'), 'ec\nstate f()\necho("hello")\nend\n');
 const resultFile = path.join(workspace, 'test-result.json');
